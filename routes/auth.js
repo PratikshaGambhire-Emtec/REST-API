@@ -25,7 +25,7 @@ router.post('/signup', (request, response)=> {
       } else{
           console.log(result)
       }
-      response.send('done')
+      response.send('Signup successful')
   })
 
 })
@@ -55,5 +55,50 @@ router.post('/signin', (request, response)=> {
        
     })
 })
+
+router.get('/profile/:id',(request,response)=>{
+    
+    const{ id }=request.params
+    const query ='select * from auth where id = ?'
+    const params=[id]
+
+    db.execute(query,params,(error,result)=>{
+        if(error)
+        {
+            console.log("No Data:"+error)
+            response.send("No data")
+        }
+        else
+        {
+            response.send(result)
+        }
+    })
+})
+
+router.put('/forget/:id',(request,response)=>{
+    const {email,password}=request.body;
+   // const encpass=''+cryptoJs.MD5(password);
+    const {id}=request.params;
+    const query='update auth set password=? where id=? and email=?'
+    const params=[password,id,email]
+
+    db.execute(query,params,(error,result)=>{
+        if(error)
+        {
+            console.log(error);
+            response.send('Something Went Wrong');
+        }
+        if(result.affectedRows !=0)
+        {
+            console.log('Reset Password Successful');
+            response.send('Reset Password Successful');
+        }
+        else{
+            console.log('Provided Email address is incorrect');
+            response.send('Email is Incorrect');
+        }
+    })
+})
+
 
 module.exports=router

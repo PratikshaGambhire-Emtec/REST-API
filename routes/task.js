@@ -63,11 +63,11 @@ router.delete('/:id', (request, response)=> {
 
 })
 
-router.patch('/:id/status', (request, response)=> {
+router.put('/:id/status', (request, response)=> {
     const {userId, title, contents }= request.body
 
     const query= `update task set title=?, contents= ? where id = ?`
-    const params= [title, contents, id]
+    const params= [title, contents, userId]
 
     db.execute(query, params, (error, result)=> {
         if(error){
@@ -77,7 +77,7 @@ router.patch('/:id/status', (request, response)=> {
         }
         response.send('done')   
     })
-})
+ })
 
 //export router and use it in server.js
 module.exports= router
